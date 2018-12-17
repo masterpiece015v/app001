@@ -18,19 +18,38 @@ public abstract class Table {
     public void addField( TableField field ){
         fieldList.add( field );
     }
-
+    public String getName(){return this.name;}
     public String getCreateTable(){
-        String sql = "create table " + this.name + "(";
+        String sql = "create table " + this.name + " (";
 
+        String p_sql = "";
+        int p_count = 0;
+        //項目を作る
         for( int i = 0 ; i < fieldList.size() ; i++ ){
             if( i == 0 ){
                 sql = sql + fieldList.get(i).getCreateTable();
             }else{
                 sql = sql + "," + fieldList.get(i).getCreateTable();
             }
+
+            if( fieldList.get(i).getPrimaryKey() ){
+                if( p_count == 0 ){
+                    p_sql = "primary key (" + fieldList.get(i).getName().toString() ;
+                }else{
+                    p_sql = p_sql + "," + fieldList.get(i).getName() ;
+                }
+                p_count = p_count + 1;
+            }
+
         }
 
-        return sql + ");";
+        if( p_count > 0 ){
+            sql = sql + "," + p_sql + "));";
+        }else{
+            sql = sql + "));";
+        }
+
+        return sql;
 
     }
     public String getDeleteTable(){
@@ -43,7 +62,7 @@ public abstract class Table {
         List<String> list = new ArrayList<>();
         //バリューがなくなるまで
         for( String[] value : fieldValues ){
-            String sql = "insert into @tbl(@fields) values (@values);";
+            String sql = "insert into @tbl (@fields) values (@values);";
 
             sql = sql.replace( "@tbl", name );
 
@@ -53,14 +72,14 @@ public abstract class Table {
             for( int i = 0 ; i < fieldList.size() ; i++ ){
                 if( i == 0 ){
                     fields = fieldList.get(i).getName();
-                    if( fieldList.get(i).getFieldType()==FieldType.INT){
+                    if( fieldList.get(i).getFieldType()==FieldType.INTEGER){
                         values = value[i];
                     }else{
                         values = "'" + value[i] + "'";
                     }
                 }else{
                     fields = fields + "," + fieldList.get(i).getName();
-                    if( fieldList.get(i).getFieldType()==FieldType.INT ){
+                    if( fieldList.get(i).getFieldType()==FieldType.INTEGER ){
                         values = values + "," + value[i];
                     }else{
                         values = values + "," + "'" + value[i] + "'";
@@ -75,7 +94,13 @@ public abstract class Table {
         return list;
     }
     public void setValue(String[] values){
-        fieldValues.add( values );
+        
+        if( values.length == fieldList.size() ){
+            fieldValues.add( values );
+        }else{
+            System.out.println("文字数が合いません");
+        }
+        
     }
 
     public Boolean equals( String tableName ){

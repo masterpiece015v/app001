@@ -15,14 +15,21 @@ public class TableField {
 
     public String getName(){return name;}
     public String getCreateTable(){
-
-        String sql = name + " " + type.toString() + "(" + size.toString() + ")";
+        String sql = null;
+        if(type==FieldType.CHAR) {
+            sql = name + " " + type.toString() + "(" + size.toString() + ")";
+        }else{
+            sql = name + " " + type.toString();
+        }
         return sql;
     }
     public FieldType getFieldType(){return type;}
     public Boolean equals( String name ){
         return this.name.equals(name);
 
+    }
+    public Boolean getPrimaryKey(){
+        return this.primarykey;
     }
 
 }
