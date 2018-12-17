@@ -16,7 +16,7 @@ public class TableField {
     public String getName(){return name;}
     public String getCreateTable(){
 
-        String sql = name + " " + type.toString() + "(" + size.toString() + ") " + (primarykey?"primary key":"");
+        String sql = name + " " + type.toString() + "(" + size.toString() + ")";
         return sql;
     }
     public FieldType getFieldType(){return type;}
