@@ -5,13 +5,16 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-public class SQLiteAdapter{
+public class SQLiteAdapter {
 
     SQLiteOpenHelper helper;
     Database data;
@@ -61,8 +64,6 @@ public class SQLiteAdapter{
                 sqliteDb.execSQL( item );
             }
         }
-
-
     }
 
     public Cursor getCursor( String sql ){
@@ -93,6 +94,7 @@ public class SQLiteAdapter{
         sqliteDb.execSQL( sql );
 
     }
+
 
 }
 
